@@ -1,0 +1,31 @@
+class Solution 
+{
+    public static int maxSkill(int[] arr) 
+    {
+        int n = arr.length;
+        int[][] dp = new int[n][n];
+
+        for (int len = 1; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+                for (int k = i; k <= j; k++) {
+                    
+                    // handle left & right neighbor values properly
+                    int leftValue = (i == 0) ? 1 : arr[i - 1];
+                    int rightValue = (j == n - 1) ? 1 : arr[j + 1];
+
+                    // skills gained before and after removing k
+                    int before = (k == i) ? 0 : dp[i][k - 1];
+                    int after = (k == j) ? 0 : dp[k + 1][j];
+
+                    // gain if k is removed last
+                    int gain = leftValue * arr[k] * rightValue + before + after;
+
+                    dp[i][j] = Math.max(dp[i][j], gain);
+                }
+            }
+        }
+
+        return dp[0][n - 1];
+    }
+}
